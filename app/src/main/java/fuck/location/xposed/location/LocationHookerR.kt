@@ -190,16 +190,16 @@ class LocationHookerR {
     fun hookDLC(lpparam: XC_LoadPackage.LoadPackageParam) {
         val clazz = lpparam.classLoader.loadClass("com.android.server.location.LocationManagerService")
 
-        /*findAllMethods(clazz) {
+        findAllMethods(clazz) {
             name == "initializeProvidersLocked" && isPrivate
         }.hookAfter { param ->
-            val locationProviderManager = findMethod(clazz) {
+            /*val locationProviderManager = findMethod(clazz) {
                 name == "getLocationProviderManager"
             }.invoke(param.thisObject, "fused")
 
             findMethod(locationProviderManager.javaClass) {
                 name == "setRealProvider"
-            }.invoke(locationProviderManager, null)
-        }*/
+            }.invoke(locationProviderManager, null)*/
+        }
     }
 }
