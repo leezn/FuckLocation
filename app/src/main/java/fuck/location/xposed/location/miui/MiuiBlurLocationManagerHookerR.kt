@@ -20,7 +20,7 @@ import fuck.location.xposed.helpers.ConfigGateway
 import org.lsposed.hiddenapibypass.HiddenApiBypass
 import java.lang.Exception
 
-class MiuiBlurLocationManagerHookerAfterR {
+class MiuiBlurLocationManagerHookerR {
     @SuppressLint("PrivateApi")
     @RequiresApi(Build.VERSION_CODES.Q)
     @OptIn(ExperimentalStdlibApi::class)
@@ -29,7 +29,7 @@ class MiuiBlurLocationManagerHookerAfterR {
         when (Build.VERSION.SDK_INT) {
             Build.VERSION_CODES.S -> {
                 clazz =
-                    lpparam.classLoader.loadClass("com.android.server.location.MiuiBlurLocationManagerStub")
+                    lpparam.classLoader.loadClass("com.android.server.location.MiuiBlurLocationManagerImpl")
             }
 
             Build.VERSION_CODES.R -> {

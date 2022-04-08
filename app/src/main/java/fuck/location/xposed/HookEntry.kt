@@ -22,7 +22,8 @@ import fuck.location.xposed.location.WLANHooker
 import fuck.location.xposed.location.gnss.GnssHookerPreQ
 import fuck.location.xposed.location.gnss.GnssManagerServiceHookerR
 import fuck.location.xposed.location.gnss.GnssManagerServiceHookerS
-import fuck.location.xposed.location.miui.MiuiBlurLocationManagerHookerAfterR
+import fuck.location.xposed.location.miui.MiuiBlurLocationManagerHookerR
+import fuck.location.xposed.location.miui.MiuiBlurLocationManagerHookerS
 import fuck.location.xposed.location.oplus.NlpDLCS
 import java.lang.Exception
 
@@ -71,11 +72,10 @@ class HookEntry : IXposedHookZygoteInit, IXposedHookLoadPackage {
                         when (Build.VERSION.SDK_INT) {
                             Build.VERSION_CODES.S -> {
                                 if (Miui().isMIUI()) {
-                                    MiuiBlurLocationManagerHookerAfterR().hookGetBlurryLocation(lpparam)    // It is only a stub :(
+                                    MiuiBlurLocationManagerHookerS().hookGetBlurryLocationS(lpparam)
                                 } else if (Oplus().isOplus()) {
                                     NlpDLCS().hookColorOS(lpparam)
                                 }
-
                                 LocationHookerAfterS().hookLastLocation(lpparam)
                                 LocationHookerAfterS().hookDLC(lpparam)
 
@@ -83,15 +83,13 @@ class HookEntry : IXposedHookZygoteInit, IXposedHookLoadPackage {
                             }
                             Build.VERSION_CODES.R -> {  // Android 11 and MIUI
                                 if (Miui().isMIUI()) {
-                                    MiuiBlurLocationManagerHookerAfterR().hookGetBlurryLocation(lpparam)
-
-                                    GnssManagerServiceHookerR().hookAddGnssBatchingCallback(lpparam)
-                                } else {
-                                    LocationHookerR().hookLastLocation(lpparam)
-                                    LocationHookerR().hookDLC(lpparam)
-
-                                    GnssManagerServiceHookerR().hookAddGnssBatchingCallback(lpparam)
+                                    MiuiBlurLocationManagerHookerR().hookGetBlurryLocation(lpparam)
                                 }
+
+                                LocationHookerR().hookLastLocation(lpparam)
+                                LocationHookerR().hookDLC(lpparam)
+
+                                GnssManagerServiceHookerR().hookAddGnssBatchingCallback(lpparam)
                             }
                             else -> {    // For Android 10 and earlier, run this fallback version
                                 LocationHookerPreQ().hookLastLocation(lpparam)
