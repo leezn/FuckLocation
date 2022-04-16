@@ -105,11 +105,13 @@ class ConfigGateway private constructor() {
             name == "getInstallerPackageName"
         }.hookMethod {
             before { param ->
+                XposedBridge.log("FL: [Track nu11ptr] Triggered getInstallerPackageName!")
                 when {
                     param.args[0] == magicNumber.toString() -> {
                         readPackageListInternal(param)
                     }
                     param.args[0] == magicNumberLocation.toString() -> {
+                        XposedBridge.log("FL: [Track nu11ptr] Triggered readFakeLocationInternal!")
                         readFakeLocationInternal(param)
                         return@before
                     }
@@ -169,7 +171,9 @@ class ConfigGateway private constructor() {
     private fun readFakeLocationInternal(param: XC_MethodHook.MethodHookParam) {
         var jsonFile = File("$dataDir/fakeLocation.json")
 
+        XposedBridge.log("FL: [Track nu11ptr] Triggered readFakeLocationInternal!")
         try {
+            XposedBridge.log("FL: [Track nu11ptr] Triggered readFakeLocationInternal (try)!")
             if (!jsonFile.exists()) {
                 val jsonFileDirectory = File("$dataDir/")
                 jsonFileDirectory.mkdirs()
@@ -188,6 +192,8 @@ class ConfigGateway private constructor() {
                 }
                 "{\"x\":0.0, \"y\":0.0, \"eci\":0, \"pci\":0, \"tac\":0, \"earfcn\":0, \"bandwidth\":0}"
             }
+
+            XposedBridge.log("FL: [Track nu11ptr] Triggered readFakeLocationInternal (result)! $json")
 
             param.result = json
         } catch (e: Exception) {
@@ -235,6 +241,8 @@ class ConfigGateway private constructor() {
         val packageManager =
             magicContext.packageManager
 
+        XposedBridge.log("FL: [Track nu11ptr] Triggered hiddenApiBypass!")
+
         return when (action) {
             2 -> HiddenApiBypass.invoke(
                 packageManager.javaClass,
@@ -279,7 +287,8 @@ class ConfigGateway private constructor() {
         val json = try {
             universalAPICaller("None", 4) as String
         } catch (e: Exception) {
-            XposedBridge.log("FL: Failed to read fake location. Fallback to {\"x\":0.0, \"y\":0.0, \"eci\":0, \"pci\":0, \"tac\":0, \"earfcn\":0, \"bandwidth\":0}")
+            XposedBridge.log("FL: Failed to read fake location. Fallback to {\"x\":0.0, \"y\":0.0, \"eci\":0, \"pci\":0, \"tac\":0, \"earfcn\":0, \"bandwidth\":0} + $e")
+            e.printStackTrace()
             "{\"x\":0.0, \"y\":0.0, \"eci\":0, \"pci\":0, \"tac\":0, \"earfcn\":0, \"bandwidth\":0}"
         }
 
